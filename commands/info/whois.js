@@ -4,8 +4,8 @@ const { stripIndents } = require("common-tags");
 
 module.exports = {
     name: "whois",
-    aliases: ["who", "user", "info"],
-    description: "Returns user information",
+    aliases: ["who", "user"],
+    description: "Retourne les informations d'utilisateur",
     usage: "[username | id | mention]",
     run: (client, message, args) => {
         const member = getMember(message, args.join(" "));
@@ -20,8 +20,8 @@ module.exports = {
         const created = formatDate(member.user.createdAt);
 
         const embed = new MessageEmbed()
-            .setFooter(member.displayName, member.user.displayAvatarURL)
-            .setThumbnail(member.user.displayAvatarURL)
+            .setFooter(member.displayName, member.user.displayAvatarURL())
+            .setThumbnail(member.user.displayAvatarURL())
             .setColor(member.displayHexColor === '#000000' ? '#ffffff' : member.displayHexColor)
 
         .addField('Member information:', stripIndents `**- Display name:** ${member.displayName}

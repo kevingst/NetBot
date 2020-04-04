@@ -1,22 +1,101 @@
 const { MessageEmbed } = require("discord.js");
+const mysql = require('mysql');
+
+var con = mysql.createConnection({
+    host: "pradotec.fr",
+    user: "admin_etude",
+    password: "hghg45470",
+    database: 'admin_etude'
+});
 
 module.exports = {
     name: "agenda",
     category: "info",
     description: "Visualiser l'agenda de la classe.",
     run: async(client, message, args) => {
-        const exampleEmbed = new MessageEmbed()
+        var dateToday = new Date();
+        var numWeekNow;
+        const valueLundi = [];
+        const valueMardi = [];
+        const valueMercredi = [];
+        const valueJeudi = [];
+        const valueVendredi = [];
+        con.query("SELECT * FROM agenda", function(err, rows, fields) {
+            if (rows != undefined) {
+                rows.forEach(function(row) {
+                    try {
+                        var matiere = row.matiere;
+                        var intitule = row.info_devoir;
+                        var dateDevoir = new Date(row.date_devoir);
+                        var jour = dateDevoir.getDay();
+                        numWeekNow = getNumberOfWeek(dateToday);
+                        var numWeekDevoir = getNumberOfWeek(dateDevoir);
 
-        .setColor('#0099ff')
-            .setTitle(':date: Agenda du 6 au 10 Avril')
-            .addFields({ name: '\u200B', value: '\u200B' })
-            .addFields({ name: ':regional_indicator_l: | Lundi:', value: '> [EDM] Devoir partie 1 \n > [ENG] Messagerie instantanné', inline: false })
-            .addFields({ name: ':regional_indicator_m: | Mardi:', value: '> [ENG] Messagerie instantanné', inline: false })
-            .addFields({ name: ':regional_indicator_m: | Mercredi:', value: '> [EDM] Devoir partie 2 \n > [ENG] Messagerie instantanné', inline: false })
-            .addFields({ name: ':regional_indicator_j: | Jeudi:', value: '> [SISR] RDV M.Mouchard 14h30', inline: false })
-            .addFields({ name: ':regional_indicator_v: | Vendredi:', value: '> [SISR] RDV M.Mouchard 14h30 \n > [ENG] Messagerie instantanné', inline: false })
-            .setTimestamp()
-            .setFooter('Hébergé sur le serveur de ThomasM', '');
-        message.channel.send(exampleEmbed);
+                        if (dateToday.getDay() == 6 || dateToday.getDay() == 0) {
+                            numWeekNow = numWeekNow + 1;
+                        }
+                        console.log('idDevoir= ' + row.id_devoir);
+                        console.log('numWeekNow= ' + numWeekNow);
+                        console.log('numWeekDevoir= ' + numWeekDevoir);
+
+                        if (numWeekNow == numWeekDevoir) {
+                            if (jour == 1) {
+                                valueLundi.push(`> [${matiere}] ${intitule}`);
+                            }
+                            if (jour == 2) {
+                                valueMardi.push(`> [${matiere}] ${intitule}`);
+                            }
+                            if (jour == 3) {
+                                valueMercredi.push(`> [${matiere}] ${intitule}`);
+                            }
+                            if (jour == 4) {
+                                valueJeudi.push(`> [${matiere}] ${intitule}`);
+                            }
+                            if (jour == 5) {
+                                valueVendredi.push(`> [${matiere}] ${intitule}`);
+                            }
+                        }
+
+                    } catch (error) {
+                        console.error('Erreur: Envoi du message Discord !');
+                        console.error(error);
+                    }
+                    console.log('');
+                });
+
+                const embed = new MessageEmbed()
+                    .setColor('#0099ff')
+                    .setTitle(`:date: Agenda de la semaine ${numWeekNow}`)
+                    .addFields({ name: '\u200B', value: '\u200B' })
+                    .setTimestamp()
+                    .setFooter('Hébergé sur le serveur de ThomasM', '');
+
+                embed.addFields({ name: ':regional_indicator_l: | Lundi:', value: valueLundi, inline: false });
+                embed.addFields({ name: ':regional_indicator_m: | Mardi:', value: valueMardi, inline: false });
+                embed.addFields({ name: ':regional_indicator_m: | Mercredi:', value: valueMercredi, inline: false });
+                embed.addFields({ name: ':regional_indicator_j: | Jeudi:', value: valueJeudi, inline: false });
+                embed.addFields({ name: ':regional_indicator_v: | Vendredi:', value: valueVendredi, inline: false });
+
+                message.channel.send(embed);
+            }
+        });
     }
+}
+
+// function getNumberOfWeek(date) {
+//     const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+//     const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+//     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+// }
+
+function getNumberOfWeek(dt) {
+    var tdt = new Date(dt.valueOf());
+    var dayn = (dt.getDay() + 6) % 7;
+    tdt.setDate(tdt.getDate() - dayn + 3);
+    var firstThursday = tdt.valueOf();
+    tdt.setMonth(0, 1);
+    if (tdt.getDay() !== 4) {
+        tdt.setMonth(0, 1 + ((4 - tdt.getDay()) + 7) % 7);
+    }
+    return 1 + Math.ceil((firstThursday - tdt) / 604800000);
 }
