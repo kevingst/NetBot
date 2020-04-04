@@ -39,6 +39,8 @@ function getAll(client, message) {
         .map(cat => stripIndents `**${cat[0].toUpperCase() + cat.slice(1)}** \n${commands(cat)}`)
         .reduce((string, category) => string + "\n" + category);
 
+    embed.setTimestamp()
+    embed.setFooter(`NetbeansBot v2.0.2`);
     return message.channel.send(embed.setDescription(info));
 }
 
