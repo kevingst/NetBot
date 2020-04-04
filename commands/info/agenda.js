@@ -34,9 +34,6 @@ module.exports = {
                         if (dateToday.getDay() == 6 || dateToday.getDay() == 0) {
                             numWeekNow = numWeekNow + 1;
                         }
-                        console.log('idDevoir= ' + row.id_devoir);
-                        console.log('numWeekNow= ' + numWeekNow);
-                        console.log('numWeekDevoir= ' + numWeekDevoir);
 
                         if (numWeekNow == numWeekDevoir) {
                             if (jour == 1) {
@@ -60,7 +57,6 @@ module.exports = {
                         console.error('Erreur: Envoi du message Discord !');
                         console.error(error);
                     }
-                    console.log('');
                 });
 
                 const embed = new MessageEmbed()
