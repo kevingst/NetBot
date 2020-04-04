@@ -4,10 +4,10 @@ const fs = require("fs");
 const mysql = require('mysql');
 
 var con = mysql.createConnection({
-    host: "pradotec.fr",
-    user: "admin_etude",
-    password: "hghg45470",
-    database: 'admin_etude'
+    host: "",
+    user: "",
+    password: "",
+    database: ""'
 });
 
 con.connect(function(err) {
