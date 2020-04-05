@@ -40,7 +40,7 @@ function getAll(client, message) {
         .reduce((string, category) => string + "\n" + category);
 
     embed.setTimestamp()
-    embed.setFooter(`NetbeansBot v2.0.2`);
+    embed.setFooter(`NetbeansBot v2.0.3`);
     return message.channel.send(embed.setDescription(info));
 }
 
