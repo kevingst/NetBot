@@ -1,13 +1,14 @@
 const { Client, Collection } = require("discord.js");
 const { config } = require("dotenv");
 const fs = require("fs");
+const configDB = require("./config.json");
 const mysql = require('mysql');
 
 var con = mysql.createConnection({
-    host: "",
-    user: "",
-    password: "",
-    database: ""'
+    host: configDB.host,
+    user: configDB.user,
+    password: configDB.password,
+    database: configDB.database
 });
 
 con.connect(function(err) {
@@ -38,7 +39,7 @@ client.on("ready", () => {
     client.user.setPresence({
         status: "online",
         activity: {
-            name: "apprendre la vie",
+            name: "apprendre la vie (dev mode)",
             type: "STREAMING"
         }
     });
