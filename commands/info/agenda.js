@@ -1,12 +1,12 @@
 const { MessageEmbed } = require("discord.js");
 const mysql = require('mysql');
-const configDB = require("../../config.json");
+const configJSON = require("../../config.json");
 
 var con = mysql.createConnection({
-    host: configDB.host,
-    user: configDB.user,
-    password: configDB.password,
-    database: configDB.database
+    host: configJSON.host,
+    user: configJSON.user,
+    password: configJSON.password,
+    database: configJSON.database
 });
 
 module.exports = {

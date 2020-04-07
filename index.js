@@ -1,14 +1,14 @@
 const { Client, Collection } = require("discord.js");
 const { config } = require("dotenv");
 const fs = require("fs");
-const configDB = require("./config.json");
+const configJSON = require("./config.json");
 const mysql = require('mysql');
 
 var con = mysql.createConnection({
-    host: configDB.host,
-    user: configDB.user,
-    password: configDB.password,
-    database: configDB.database
+    host: configJSON.host,
+    user: configJSON.user,
+    password: configJSON.password,
+    database: configJSON.database
 });
 
 con.connect(function(err) {
