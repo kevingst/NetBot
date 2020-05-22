@@ -5,8 +5,9 @@ const { stripIndents } = require("common-tags");
 module.exports = {
     name: "whois",
     aliases: ["who", "user"],
-    description: "Retourne les informations d'utilisateur",
-    usage: "[username | id | mention]",
+    category: "information",
+    description: "Retourne les informations d'un utilisateur",
+    usage: "[pseudo | id | mention]",
     run: (client, message, args) => {
         const member = getMember(message, args.join(" "));
 
@@ -24,19 +25,19 @@ module.exports = {
             .setThumbnail(member.user.displayAvatarURL())
             .setColor(member.displayHexColor === '#000000' ? '#ffffff' : member.displayHexColor)
 
-        .addField('Member information:', stripIndents `**- Display name:** ${member.displayName}
-            **- Joined at:** ${joined}
+        .addField('Information membre:', stripIndents `**- Nom:** ${member.displayName}
+            **- A rejoins le:** ${joined}
             **- Roles:** ${roles}`, true)
 
-        .addField('User information:', stripIndents `**- ID:** ${member.user.id}
-            **- Username**: ${member.user.username}
+        .addField('Information utilisateur:', stripIndents `**- ID:** ${member.user.id}
+            **- Pseudo**: ${member.user.username}
             **- Tag**: ${member.user.tag}
-            **- Created at**: ${created}`, true)
+            **- Crée le**: ${created}`, true)
 
         .setTimestamp()
 
         if (member.user.presence.activity)
-            embed.addField('Currently playing', stripIndents `** Name:** ${member.user.presence.activity.name}`);
+            embed.addField('Joue actuellement à', stripIndents `** Nom:** ${member.user.presence.activity.name}`);
 
         message.channel.send(embed);
     }
