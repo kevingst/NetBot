@@ -12,6 +12,8 @@ module.exports = {
         const agree = `✅`;
         const disagree = `❎`;
 
+        const resultAgree = 0;
+
         const question = await message.channel.send(args.join(" "));
         await question.react(agree);
         await question.react(disagree);
@@ -19,7 +21,7 @@ module.exports = {
 
         // Create a reaction collector
         const reactions = await question.awaitReactions(reaction => reaction.emoji.name === agree || reaction.emoji.name === disagree, { time: 15000 });
-        message.channel.send(args.join(" ") + `${agree} : ${reactions.get(agree).count-1} | ${disagree} : ${reactions.get(disagree).count - 1}`);
+        message.channel.send(args.join(" ") + ` ${agree} : ${reactions.get(agree).count - 1} | ${disagree} : ${reactions.get(disagree).count - 1}`);
         question.delete();
     }
 }

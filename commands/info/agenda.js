@@ -59,22 +59,36 @@ module.exports = {
                         console.error(error);
                     }
                 });
-
-                const embed = new MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(`:date: Agenda de la semaine ${numWeekNow}`)
-                    .addFields({ name: '\u200B', value: '\u200B' })
-                    .setTimestamp()
-                    .setFooter('Hébergé sur le serveur de ThomasM', '');
-
-                embed.addFields({ name: ':regional_indicator_l: | Lundi:', value: valueLundi, inline: false });
-                embed.addFields({ name: ':regional_indicator_m: | Mardi:', value: valueMardi, inline: false });
-                embed.addFields({ name: ':regional_indicator_m: | Mercredi:', value: valueMercredi, inline: false });
-                embed.addFields({ name: ':regional_indicator_j: | Jeudi:', value: valueJeudi, inline: false });
-                embed.addFields({ name: ':regional_indicator_v: | Vendredi:', value: valueVendredi, inline: false });
-
-                message.channel.send(embed);
             }
+            if (valueLundi.length == 0) {
+                valueLundi.push(`> [:zzz:]`);
+            }
+            if (valueMardi.length == 0) {
+                valueMardi.push(`> [:zzz:]`);
+            }
+            if (valueMercredi.length == 0) {
+                valueMercredi.push(`> [:zzz:]`);
+            }
+            if (valueJeudi.length == 0) {
+                valueJeudi.push(`> [:zzz:]`);
+            }
+            if (valueVendredi.length == 0) {
+                valueVendredi.push(`> [:zzz:]`);
+            }
+
+            const embed = new MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle(`:date: Agenda de la semaine ${numWeekNow}`)
+                .addFields({ name: '\u200B', value: '\u200B' })
+                .setTimestamp()
+                .setFooter('Hébergé sur le serveur de Thomas Masson', '')
+                .addFields({ name: ':regional_indicator_l: | Lundi:', value: valueLundi, inline: false })
+                .addFields({ name: ':regional_indicator_m: | Mardi:', value: valueMardi, inline: false })
+                .addFields({ name: ':regional_indicator_m: | Mercredi:', value: valueMercredi, inline: false })
+                .addFields({ name: ':regional_indicator_j: | Jeudi:', value: valueJeudi, inline: false })
+                .addFields({ name: ':regional_indicator_v: | Vendredi:', value: valueVendredi, inline: false });
+
+            message.channel.send(embed);
         });
     }
 }
