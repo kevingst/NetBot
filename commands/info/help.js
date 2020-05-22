@@ -3,9 +3,9 @@ const { stripIndents } = require("common-tags");
 
 module.exports = {
     name: "help",
-    aliases: ["h"],
+    aliases: ["h", "aide"],
     category: "info",
-    description: "Retourne toutes les commandes ou les infos d'une commande spécifique.",
+    description: "Retourne toutes les commandes ou les informations d'une commande spécifique.",
     usage: "[command | alias]",
     run: async(client, message, args) => {
         // If there's an args found
@@ -40,7 +40,7 @@ function getAll(client, message) {
         .reduce((string, category) => string + "\n" + category);
 
     embed.setTimestamp()
-    embed.setFooter(`NetbeansBot dev version`);
+    embed.setFooter(`NetbeansBot v2.0`);
     return message.channel.send(embed.setDescription(info));
 }
 
@@ -50,7 +50,7 @@ function getCMD(client, message, input) {
     // Get the cmd by the name or alias
     const cmd = client.commands.get(input.toLowerCase()) || client.commands.get(client.aliases.get(input.toLowerCase()));
 
-    let info = `No information found for command **${input.toLowerCase()}**`;
+    let info = `Pas d'information concernant la commande **${input.toLowerCase()}**`;
 
     // If no cmd is found, send not found embed
     if (!cmd) {
@@ -58,8 +58,8 @@ function getCMD(client, message, input) {
     }
 
     // Add all cmd info to the embed
-    if (cmd.name) info = `**Command name**: ${cmd.name}`;
-    if (cmd.aliases) info += `\n**Aliases**: ${cmd.aliases.map(a => `\`${a}\``).join(", ")}`;
+    if (cmd.name) info = "**Nom de la commande**: `" + `${cmd.name}` + "`";
+    if (cmd.aliases) info += `\n**Alias**: ${cmd.aliases.map(a => `\`${a}\``).join(", ")}`;
     if (cmd.description) info += `\n**Description**: ${cmd.description}`;
     if (cmd.usage) {
         info += `\n**Usage**: ${cmd.usage}`;
