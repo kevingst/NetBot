@@ -8,7 +8,7 @@ module.exports = {
     aliases: ["insta"],
     category: "information",
     description: "Afficher le profil instagram à partir du pseudo",
-    usage: "<name>",
+    usage: "<nom>",
     run: async(client, message, args) => {
         const name = args.join(" ");
 

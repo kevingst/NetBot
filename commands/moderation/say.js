@@ -1,8 +1,9 @@
 module.exports = {
     name: "say",
+    aliases: ["dire", "s"],
     category: "moderation",
-    description: "Parler à la place du bot",
-    usage: "<input>",
+    description: "Faire parler Netbeans",
+    usage: "<message>",
     run: async(client, message, args) => {
         if (message.deletable) message.delete();
 

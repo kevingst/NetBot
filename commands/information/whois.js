@@ -36,8 +36,8 @@ module.exports = {
 
         .setTimestamp()
 
-        if (member.user.presence.activity)
-            embed.addField('Joue actuellement à', stripIndents `** Nom:** ${member.user.presence.activity.name}`);
+        if (member.user.presence.activities)
+            embed.addField('Joue actuellement à', stripIndents `** Nom:** ${member.user.presence.activities}`);
 
         message.channel.send(embed);
     }

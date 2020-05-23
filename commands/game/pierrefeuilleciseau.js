@@ -4,9 +4,10 @@ const { promptMessage } = require("../../functions.js");
 const chooseArr = ["🗻", "📰", "✂"];
 
 module.exports = {
-    name: "pfc",
-    category: "fun",
-    description: "C'est un Pierre, Feuille, Ciseaux. Je vais pas expliquer les règles.",
+    name: "pierrefeuilleciseau",
+    aliases: ["pfc"],
+    category: "game",
+    description: "C'est un Pierre, Feuille, Ciseaux. Je vais pas t'expliquer les règles.",
     usage: "pfc",
     run: async(client, message, args) => {
         const embed = new MessageEmbed()

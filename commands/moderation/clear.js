@@ -2,7 +2,8 @@ module.exports = {
     name: "clear",
     aliases: ["purge", "nuke"],
     category: "moderation",
-    description: "Clears le chat",
+    description: "Supprimer le contenu d'un salon textuel.",
+    usage: "<nombre>",
     run: async(client, message, args) => {
         if (message.deletable) {
             message.delete();
@@ -15,7 +16,7 @@ module.exports = {
 
         // Check if args[0] is a number
         if (isNaN(args[0]) || parseInt(args[0]) <= 0) {
-            return message.reply("Yeah.... Ce n'est pas un nombre? Je ne peux pas supprimé 0 message.").then(m => m.delete(5000));
+            return message.reply("Ce n'est pas un nombre ? Je ne peux pas supprimé 0 message.").then(m => m.delete(5000));
         }
 
         // Maybe the bot can't delete messages
