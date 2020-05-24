@@ -12,6 +12,7 @@ module.exports = {
     run: async(client, message, args) => {
         const embed = new MessageEmbed()
             .setColor("#ffffff")
+            .setTitle(`${message.member.displayName} veut affronter ${message.guild.me.displayName} au Pierre/Feuille/Ciseau`)
             .setFooter(message.guild.me.displayName, client.user.displayAvatarURL())
             .setDescription("Sélectionne un emoji pour commencer à jouer.")
             .setTimestamp();
@@ -19,18 +20,22 @@ module.exports = {
         const m = await message.channel.send(embed);
         // Wait for a reaction to be added
         const reacted = await promptMessage(m, message.author, 30, chooseArr);
+        var date = new Date();
+        var time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        console.log(`[pfc] ${message.member.displayName}: Succès ! (channel: "${message.channel.name}" à ${time})`);
 
         // Get a random emoji from the array
         const botChoice = chooseArr[Math.floor(Math.random() * chooseArr.length)];
 
         // Check if it's a win/tie/loss
         const result = await getResult(reacted, botChoice);
+        console.log(result);
         // Clear the reactions
         await m.reactions.removeAll();
 
         embed
             .setDescription("")
-            .addField(result, `${reacted} vs ${botChoice}`);
+            .addField(`${reacted} vs ${botChoice}`, result);
 
         m.edit(embed);
 
@@ -38,11 +43,11 @@ module.exports = {
             if ((me === "🗻" && clientChosen === "✂") ||
                 (me === "📰" && clientChosen === "🗻") ||
                 (me === "✂" && clientChosen === "📰")) {
-                return "Tu as gagné!";
+                return `Victoire de ${message.member.displayName}`;
             } else if (me === clientChosen) {
                 return "Egalité !";
             } else {
-                return "Tu as perdu !";
+                return `Victoire de ${message.guild.me.displayName}`;
             }
         }
     }

@@ -13,7 +13,7 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
     if (err) throw err;
-    console.log("[Succès] Connexion a la base de donnée !");
+    console.log("[BDD] Connexion a la base de donnée avec succès !");
 });
 
 const client = new Client({

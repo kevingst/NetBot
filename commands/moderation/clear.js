@@ -11,7 +11,7 @@ module.exports = {
 
         // Member doesn't have permissions
         if (!message.member.hasPermission("MANAGE_MESSAGES")) {
-            return message.reply("Tu ne peux pas supprimer les messages....").then(m => m.delete(5000));
+            return message.reply("Tu ne peux pas supprimer les messages...").then(m => m.delete(5000));
         }
 
         // Check if args[0] is a number

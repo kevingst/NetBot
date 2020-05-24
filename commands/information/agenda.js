@@ -90,6 +90,9 @@ module.exports = {
                 .addFields({ name: ':regional_indicator_v: | Vendredi:', value: valueVendredi, inline: false });
 
             message.channel.send(embed);
+            var date = new Date();
+            var time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+            console.log(`[agenda] ${message.member.displayName}: Succès ! (channel: "${message.channel.name}" à ${time})`)
         });
     }
 }
