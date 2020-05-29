@@ -1,10 +1,12 @@
+const { createLog } = require("../../functions.js");
+
 module.exports = {
     name: "clear",
     aliases: ["purge", "nuke"],
     category: "moderation",
     description: "Supprimer le contenu d'un salon textuel.",
     usage: "<nombre>",
-    run: async(client, message, args) => {
+    run: async(client, message, args, command) => {
         if (message.deletable) {
             message.delete();
         }
@@ -35,5 +37,7 @@ module.exports = {
         message.channel.bulkDelete(deleteAmount, true)
             .then(deleted => message.channel.send(`J'ai supprimé \`${deleted.size}\` messages.`))
             .catch(err => message.reply(`Something went wrong... ${err}`));
+
+        createLog(command, message.member, message.channel);
     }
 }

@@ -1,16 +1,18 @@
 const { MessageEmbed } = require("discord.js");
+const { createLog } = require("../../functions.js");
+
 module.exports = {
     name: "vote",
     aliases: ["v"],
     category: "outil",
     description: "Créer un vote Oui/Non/peut-etre.",
     usage: "<question>",
-    run: async(client, message, args) => {
+    run: async(client, message, args, command) => {
         if (!message.content.includes("?")) return message.reply(`T'es sur que c'est une question ? Il ne manquerait pas un "?" par hasard...`)
 
         var question = args.join(" ");
-        console.log(`-> Vote lancé par ${message.member.displayName}: ${question}`);
-        var time = 1 / 5;
+        createLog(command, message.member, message.channel, question);
+        var time = 1;
         var msg = message;
         var emojiList = ['👍', '👎', '🤷'];
         var embed = new MessageEmbed()
@@ -20,9 +22,9 @@ module.exports = {
             .setTimestamp();
 
         if (time) {
-            embed.setFooter(`Le vote a demarré vous avez ${time} minute(s)`)
+            embed.setFooter(`Le vote a demarré vous avez ${time} minute(s) pour voter !`)
         } else {
-            embed.setFooter(`Le vote a demarré, pas de temps défini`)
+            embed.setFooter(`Le vote a demarré, pas de temps défini.`)
         }
 
         msg.delete(); // Remove the user's command message
@@ -52,7 +54,6 @@ module.exports = {
                                     else if (reactionCountsArray[i] === max) indexMax.push(i);
 
                                 // Display winner(s)
-                                console.log(reactionCountsArray); // Debugging votes
                                 var winnersText = "";
                                 if (reactionCountsArray[indexMax[0]] == 0) {
                                     winnersText = "Personne n'a voté !"
@@ -66,6 +67,7 @@ module.exports = {
                                 embed.setFooter(`Le vote est terminé !`);
                                 embed.setTimestamp();
                                 message.edit("", embed);
+                                createLog(command, message.member, message.channel, reactionCountsArray);
                             });
                     }, time * 60 * 1000);
                 }

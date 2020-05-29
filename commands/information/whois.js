@@ -1,4 +1,4 @@
-const { getMember, formatDate } = require("../../functions.js");
+const { getMember, formatDate, createLog } = require("../../functions.js");
 const { MessageEmbed } = require("discord.js");
 const { stripIndents } = require("common-tags");
 
@@ -8,7 +8,7 @@ module.exports = {
     category: "information",
     description: "Retourne les informations d'un utilisateur",
     usage: "[pseudo | id | mention]",
-    run: (client, message, args) => {
+    run: (client, message, args, command) => {
         const member = getMember(message, args.join(" "));
 
         // Member variables
@@ -40,5 +40,6 @@ module.exports = {
             embed.addField('Joue actuellement à', stripIndents `** Nom:** ${member.user.presence.activities}`);
 
         message.channel.send(embed);
+        createLog(command, message.member, message.channel);
     }
 }

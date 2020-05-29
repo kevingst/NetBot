@@ -1,5 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { stripIndents } = require("common-tags");
+const { createLog } = require("../../functions.js");
 
 module.exports = {
     name: "help",
@@ -7,15 +8,17 @@ module.exports = {
     category: "information",
     description: "Retourne toutes les commandes ou les informations d'une commande spécifique.",
     usage: "[command | alias]",
-    run: async(client, message, args) => {
+    run: async(client, message, args, command) => {
         // If there's an args found
         // Send the info of that command found
-        // If no info found, return not found embed.
+        // If no info found, return not found embed.        
         if (args[0]) {
+            createLog(command, message.member, message.channel, args[0]);
             return getCMD(client, message, args[0]);
         } else {
             // Otherwise send all the commands available
             // Without the cmd info
+            createLog(command, message.member, message.channel);
             return getAll(client, message);
         }
     }

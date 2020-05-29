@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { stripIndents } = require("common-tags");
-
+const { createLog } = require("../../functions.js");
 const fetch = require("node-fetch");
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
     category: "information",
     description: "Afficher le profil instagram à partir du pseudo",
     usage: "<nom>",
-    run: async(client, message, args) => {
+    run: async(client, message, args, command) => {
         const name = args.join(" ");
 
         if (!name) {
@@ -44,5 +44,6 @@ module.exports = {
             **- Compte privé:** ${account.is_private ? "Oui 🔐" : "Non 🔓"}`);
 
         message.channel.send(embed);
+        createLog(command, message.member, message.channel, url);
     }
 }

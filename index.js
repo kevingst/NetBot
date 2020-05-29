@@ -22,7 +22,6 @@ const client = new Client({
 
 client.commands = new Collection();
 client.aliases = new Collection();
-
 client.categories = fs.readdirSync("./commands/");
 
 config({
@@ -62,7 +61,7 @@ client.on("message", async message => {
     if (!command) command = client.commands.get(client.aliases.get(cmd));
 
     if (command)
-        command.run(client, message, args);
+        command.run(client, message, args, command);
 });
 
 client.login(process.env.TOKEN);

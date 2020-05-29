@@ -39,5 +39,13 @@ module.exports = {
         return message
             .awaitReactions(filter, { max: 1, time: time })
             .then(collected => collected.first() && collected.first().emoji.name);
+    },
+
+    createLog: async function(command, author, channel, result) {
+        var date = new Date();
+        var time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        console.log(`[${command.name}] ${author.displayName} à effectué la commande avec succès ! channel: "${channel.name}" | Heure: ${time}`)
+        if (result)
+            console.log(`[${command.name}] Résultat: ${result}`);
     }
 };

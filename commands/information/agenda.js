@@ -1,6 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const mysql = require('mysql');
 const configJSON = require("../../config.json");
+const { createLog } = require("../../functions.js");
 
 var con = mysql.createConnection({
     host: configJSON.host,
@@ -14,7 +15,7 @@ module.exports = {
     aliases: ["devoir", "a"],
     category: "information",
     description: "Visualiser l'agenda de la classe.",
-    run: async(client, message, args) => {
+    run: async(client, message, args, command) => {
         var dateToday = new Date();
         var numWeekNow;
         const valueLundi = [];
@@ -82,7 +83,7 @@ module.exports = {
                 .setTitle(`:date: Agenda de la semaine ${numWeekNow}`)
                 .addFields({ name: '\u200B', value: '\u200B' })
                 .setTimestamp()
-                .setFooter('Hébergé sur le serveur de Thomas Masson', '')
+                .setFooter('Agenda des SIO 2', '')
                 .addFields({ name: ':regional_indicator_l: | Lundi:', value: valueLundi, inline: false })
                 .addFields({ name: ':regional_indicator_m: | Mardi:', value: valueMardi, inline: false })
                 .addFields({ name: ':regional_indicator_m: | Mercredi:', value: valueMercredi, inline: false })
@@ -90,9 +91,7 @@ module.exports = {
                 .addFields({ name: ':regional_indicator_v: | Vendredi:', value: valueVendredi, inline: false });
 
             message.channel.send(embed);
-            var date = new Date();
-            var time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-            console.log(`[agenda] ${message.member.displayName}: Succès ! (channel: "${message.channel.name}" à ${time})`)
+            createLog(command, message.member, message.channel);
         });
     }
 }
