@@ -1,16 +1,19 @@
 const { MessageEmbed } = require("discord.js");
 const { promptMessage } = require("../../functions.js");
+const { createLog } = require("../../functions.js");
 
 const chooseArr = ["🗻", "📰", "✂"];
 
 module.exports = {
-    name: "pfc",
-    category: "fun",
-    description: "C'est un Pierre, Feuille, Ciseaux. Je vais pas expliquer les règles.",
+    name: "chifoumi",
+    aliases: ["pfc", "pierrefeuilleciseau"],
+    category: "game",
+    description: "C'est un Pierre, Feuille, Ciseaux. Je vais pas t'expliquer les règles.",
     usage: "pfc",
-    run: async(client, message, args) => {
+    run: async(client, message, args, command) => {
         const embed = new MessageEmbed()
             .setColor("#ffffff")
+            .setTitle(`${message.member.displayName} veut affronter ${message.guild.me.displayName} au Pierre/Feuille/Ciseau`)
             .setFooter(message.guild.me.displayName, client.user.displayAvatarURL())
             .setDescription("Sélectionne un emoji pour commencer à jouer.")
             .setTimestamp();
@@ -24,12 +27,13 @@ module.exports = {
 
         // Check if it's a win/tie/loss
         const result = await getResult(reacted, botChoice);
+        createLog(command, message.member, message.channel, result);
         // Clear the reactions
         await m.reactions.removeAll();
 
         embed
             .setDescription("")
-            .addField(result, `${reacted} vs ${botChoice}`);
+            .addField(`${reacted} vs ${botChoice}`, result);
 
         m.edit(embed);
 
@@ -37,11 +41,11 @@ module.exports = {
             if ((me === "🗻" && clientChosen === "✂") ||
                 (me === "📰" && clientChosen === "🗻") ||
                 (me === "✂" && clientChosen === "📰")) {
-                return "Tu as gagné!";
+                return `Victoire de ${message.member.displayName}`;
             } else if (me === clientChosen) {
                 return "Egalité !";
             } else {
-                return "Tu as perdu !";
+                return `Victoire de ${message.guild.me.displayName}`;
             }
         }
     }

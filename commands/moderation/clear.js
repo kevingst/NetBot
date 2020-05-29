@@ -1,21 +1,24 @@
+const { createLog } = require("../../functions.js");
+
 module.exports = {
     name: "clear",
     aliases: ["purge", "nuke"],
     category: "moderation",
-    description: "Clears le chat",
-    run: async(client, message, args) => {
+    description: "Supprimer le contenu d'un salon textuel.",
+    usage: "<nombre>",
+    run: async(client, message, args, command) => {
         if (message.deletable) {
             message.delete();
         }
 
         // Member doesn't have permissions
         if (!message.member.hasPermission("MANAGE_MESSAGES")) {
-            return message.reply("Tu ne peux pas supprimer les messages....").then(m => m.delete(5000));
+            return message.reply("Tu ne peux pas supprimer les messages...").then(m => m.delete(5000));
         }
 
         // Check if args[0] is a number
         if (isNaN(args[0]) || parseInt(args[0]) <= 0) {
-            return message.reply("Yeah.... Ce n'est pas un nombre? Je ne peux pas supprimé 0 message.").then(m => m.delete(5000));
+            return message.reply("Ce n'est pas un nombre ? Je ne peux pas supprimé 0 message.").then(m => m.delete(5000));
         }
 
         // Maybe the bot can't delete messages
@@ -34,5 +37,7 @@ module.exports = {
         message.channel.bulkDelete(deleteAmount, true)
             .then(deleted => message.channel.send(`J'ai supprimé \`${deleted.size}\` messages.`))
             .catch(err => message.reply(`Something went wrong... ${err}`));
+
+        createLog(command, message.member, message.channel);
     }
 }
