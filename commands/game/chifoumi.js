@@ -5,8 +5,8 @@ const { createLog } = require("../../functions.js");
 const chooseArr = ["🗻", "📰", "✂"];
 
 module.exports = {
-    name: "pierrefeuilleciseau",
-    aliases: ["pfc"],
+    name: "chifoumi",
+    aliases: ["pfc", "pierrefeuilleciseau"],
     category: "game",
     description: "C'est un Pierre, Feuille, Ciseaux. Je vais pas t'expliquer les règles.",
     usage: "pfc",
