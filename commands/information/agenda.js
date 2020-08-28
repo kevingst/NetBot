@@ -83,14 +83,18 @@ module.exports = {
                 .setTitle(`:date: Agenda de la semaine ${numWeekNow}`)
                 .addFields({ name: '\u200B', value: '\u200B' })
                 .setTimestamp()
-                .setFooter('Agenda des SIO 2', '')
+                .setFooter('Agenda', '')
                 .addFields({ name: ':regional_indicator_l: | Lundi:', value: valueLundi, inline: false })
                 .addFields({ name: ':regional_indicator_m: | Mardi:', value: valueMardi, inline: false })
                 .addFields({ name: ':regional_indicator_m: | Mercredi:', value: valueMercredi, inline: false })
                 .addFields({ name: ':regional_indicator_j: | Jeudi:', value: valueJeudi, inline: false })
                 .addFields({ name: ':regional_indicator_v: | Vendredi:', value: valueVendredi, inline: false });
 
-            message.channel.send(embed);
+            if(message.channel.name == "agenda"){
+                message.channel.send(embed);
+            } else {
+                message.channel.send("Mauvais channel !")
+            }
             createLog(command, message.member, message.channel);
         });
     }

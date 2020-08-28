@@ -1,3 +1,5 @@
+const fs = require('fs') 
+
 module.exports = {
     getMember: function(message, toFind = '') {
         toFind = toFind.toLowerCase();
@@ -43,9 +45,28 @@ module.exports = {
 
     createLog: async function(command, author, channel, result) {
         var date = new Date();
-        var time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-        console.log(`[${command.name}] ${author.displayName} à effectué la commande avec succès ! channel: "${channel.name}" | Heure: ${time}`)
+        const year = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(date)
+        const month = new Intl.DateTimeFormat('fr', { month: '2-digit' }).format(date)
+        const day = new Intl.DateTimeFormat('fr', { day: '2-digit' }).format(date)
+        const hour = new Intl.DateTimeFormat('fr', { hour: '2-digit' }).format(date)
+        const min = new Intl.DateTimeFormat('fr', { minute: '2-digit' }).format(date)
+        const sec = new Intl.DateTimeFormat('fr', { second: '2-digit' }).format(date)
+
+        var time = date.getHours() + ":" + min + ":" + sec;
+
+        var newLine = `[${command.name}] (${author.id}) ${author.displayName} à effectué la commande ! channel: "${channel.name}" | Heure: ${time} \n`
+        console.log(newLine);
         if (result)
-            console.log(`[${command.name}] Résultat: ${result}`);
+            var resultat = `[${command.name}] Résultat: ${result} \n`;
+            console.log(resultat);
+        var logFile = `log_${day}_${month}_${year}.txt`
+
+        fs.appendFile(`logs/${logFile}`, `${newLine+resultat}`, function (err) {
+            if (err) {
+                fs.writeFile(`logs/${logFile}`, `${newLine+resultat}`, (err) => {
+                    if (err) throw err; 
+                })
+            }
+         });
     }
 };
