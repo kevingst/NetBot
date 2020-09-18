@@ -15,6 +15,7 @@ module.exports = {
     aliases: ["devoir", "a"],
     category: "information",
     description: "Visualiser l'agenda de la classe.",
+    usage: "[Num semaine]",
     run: async(client, message, args, command) => {
         var dateToday = new Date();
         var numWeekNow;
@@ -31,7 +32,11 @@ module.exports = {
                         var intitule = row.info_devoir;
                         var dateDevoir = new Date(row.date_devoir);
                         var jour = dateDevoir.getDay();
-                        numWeekNow = getNumberOfWeek(dateToday);
+                        if(args != null){
+                            numWeekNow = args;
+                        }else{
+                            numWeekNow = getNumberOfWeek(dateToday);
+                        }                        
                         var numWeekDevoir = getNumberOfWeek(dateDevoir);
 
                         if (dateToday.getDay() == 6 || dateToday.getDay() == 0) {
@@ -90,7 +95,7 @@ module.exports = {
                 .addFields({ name: ':regional_indicator_j: | Jeudi:', value: valueJeudi, inline: false })
                 .addFields({ name: ':regional_indicator_v: | Vendredi:', value: valueVendredi, inline: false });
 
-            if(message.channel.name == "agenda"){
+            if(message.channel.name == "【📅】agenda"){
                 message.channel.send(embed);
             } else {
                 message.channel.send("Mauvais channel !")
