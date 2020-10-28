@@ -45,6 +45,7 @@ module.exports = {
 
     createLog: async function(command, author, channel, result) {
         var date = new Date();
+        var resultat = result;
         const year = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(date)
         const month = new Intl.DateTimeFormat('fr', { month: '2-digit' }).format(date)
         const day = new Intl.DateTimeFormat('fr', { day: '2-digit' }).format(date)
@@ -56,9 +57,11 @@ module.exports = {
 
         var newLine = `[${command.name}] (${author.id}) ${author.displayName} à effectué la commande ! channel: "${channel.name}" | Heure: ${time} \n`
         console.log(newLine);
-        if (result)
-            var resultat = `[${command.name}] Résultat: ${result} \n`;
+        if (resultat != " ") {
+            resultat = `[${command.name}] Résultat: ${result} \n`;
             console.log(resultat);
+        }
+
         var logFile = `log_${day}_${month}_${year}.txt`
 
         fs.appendFile(`logs/${logFile}`, `${newLine+resultat}`, function (err) {

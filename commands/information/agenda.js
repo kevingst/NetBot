@@ -18,82 +18,37 @@ module.exports = {
     usage: "[Num semaine]",
     run: async(client, message, args, command) => {
         var dateToday = new Date();
-        var numWeekNow;
-        const valueLundi = [];
-        const valueMardi = [];
-        const valueMercredi = [];
-        const valueJeudi = [];
-        const valueVendredi = [];
-        con.query("SELECT * FROM agenda", function(err, rows, fields) {
+        var listDevoir = [];
+
+        const embed = new MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle(`:date: Agenda`)
+                .setTimestamp()
+                .setFooter('Agenda', '')
+
+        con.query("SELECT * FROM agenda where date_devoir >= now() ORDER BY date_devoir asc", function(err, rows, fields) {
             if (rows != undefined) {
                 rows.forEach(function(row) {
                     try {
                         var matiere = row.matiere;
                         var intitule = row.info_devoir;
                         var dateDevoir = new Date(row.date_devoir);
-                        var jour = dateDevoir.getDay();
-                        if(args != null){
-                            numWeekNow = args;
-                        }else{
-                            numWeekNow = getNumberOfWeek(dateToday);
-                        }                        
-                        var numWeekDevoir = getNumberOfWeek(dateDevoir);
+                        var devoir = `> [:zzz:]`;
 
-                        if (dateToday.getDay() == 6 || dateToday.getDay() == 0) {
-                            numWeekNow = numWeekNow + 1;
-                        }
+                        let dateDevoirFormat = dateDevoir.toLocaleDateString('fr-FR',{
+                            weekday: 'long',
+                            month: 'long',
+                            day: 'numeric',
+                        });
 
-                        if (numWeekNow == numWeekDevoir) {
-                            if (jour == 1) {
-                                valueLundi.push(`> [${matiere}] ${intitule}`);
-                            }
-                            if (jour == 2) {
-                                valueMardi.push(`> [${matiere}] ${intitule}`);
-                            }
-                            if (jour == 3) {
-                                valueMercredi.push(`> [${matiere}] ${intitule}`);
-                            }
-                            if (jour == 4) {
-                                valueJeudi.push(`> [${matiere}] ${intitule}`);
-                            }
-                            if (jour == 5) {
-                                valueVendredi.push(`> [${matiere}] ${intitule}`);
-                            }
-                        }
-
+                        devoir = `> **【**${getEmoji(matiere)}**】** ${intitule}`;
+                        embed.addFields({ name: `**${dateDevoirFormat.charAt(0).toUpperCase() + dateDevoirFormat.substring(1).toLowerCase()}**:`, value: devoir, inline: false })
                     } catch (error) {
                         console.error('Erreur: Envoi du message Discord !');
                         console.error(error);
                     }
                 });
             }
-            if (valueLundi.length == 0) {
-                valueLundi.push(`> [:zzz:]`);
-            }
-            if (valueMardi.length == 0) {
-                valueMardi.push(`> [:zzz:]`);
-            }
-            if (valueMercredi.length == 0) {
-                valueMercredi.push(`> [:zzz:]`);
-            }
-            if (valueJeudi.length == 0) {
-                valueJeudi.push(`> [:zzz:]`);
-            }
-            if (valueVendredi.length == 0) {
-                valueVendredi.push(`> [:zzz:]`);
-            }
-
-            const embed = new MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(`:date: Agenda de la semaine ${numWeekNow}`)
-                .addFields({ name: '\u200B', value: '\u200B' })
-                .setTimestamp()
-                .setFooter('Agenda', '')
-                .addFields({ name: ':regional_indicator_l: | Lundi:', value: valueLundi, inline: false })
-                .addFields({ name: ':regional_indicator_m: | Mardi:', value: valueMardi, inline: false })
-                .addFields({ name: ':regional_indicator_m: | Mercredi:', value: valueMercredi, inline: false })
-                .addFields({ name: ':regional_indicator_j: | Jeudi:', value: valueJeudi, inline: false })
-                .addFields({ name: ':regional_indicator_v: | Vendredi:', value: valueVendredi, inline: false });
 
             if(message.channel.name == "【📅】agenda"){
                 message.channel.send(embed);
@@ -115,4 +70,41 @@ function getNumberOfWeek(dt) {
         tdt.setMonth(0, 1 + ((4 - tdt.getDay()) + 7) % 7);
     }
     return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+}
+
+function getEmoji(matiere){
+    var newMatiere;
+    switch (matiere) {
+        case "System Exp":
+            newMatiere = "🌐 System Exp";
+            break;
+        case "Littérature Qué":
+            newMatiere = "📔 Littérature Qué";
+            break;
+        case "Web Dyn":
+            newMatiere = "💻 Web Dyn";
+            break;
+        case "Concept Web":
+            newMatiere = "💻 Concept Web";
+            break;
+        case "Logiciel Info":
+            newMatiere = "💾 Logiciel Info";
+            break;
+        case "Anglais Nul":
+            newMatiere = "👅 Anglais Nul";
+            break;
+        case "Anglais pas nul":
+            newMatiere = "👅 Anglais pas nul";
+            break;
+        case "Intro Jeu":
+            newMatiere = "🎮 Intro Jeu";
+            break;
+        case "Intro Reseau":
+            newMatiere = "🖨 Intro Reseau";
+            break;
+    
+        default:
+            break;
+    }
+    return newMatiere;
 }
