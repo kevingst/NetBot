@@ -4,25 +4,33 @@ const { createLog } = require("../../functions.js");
 const playerVote = [];
 
 module.exports = {
-    name: "vote",
-    aliases: ["v"],
+    name: "sondage",
+    aliases: ["poll"],
     category: "outil",
-    description: "Créer un vote Oui/Non/peut-etre.",
-    usage: "<question?> <Temps (min)>",
+    description: "Créer un sondage (Maximum 10 options).",
+    usage: "<question?> <option (séparé par ',')> <temps (min)>",
     run: async(client, message, args, command) => {
         if (!message.content.includes("?")) return message.reply(`T'es sur que c'est une question ? Il ne manquerait pas un "?" par hasard...`)
 
         var question = args[0];
-        var time = args[1];
+        var optionsList = args[1].split(",");
+        var time = args[2];
         if(time == null){
-            time = 1;
+            time = 0.3;
         }
 
         createLog(command, message.member, message.channel, question);
         var msg = message;
-        var emojiList = ['👍', '👎', '🤷'];
+        var emojiList = ['1⃣','2⃣','3⃣','4⃣','5⃣','6⃣','7⃣','8⃣','9⃣','🔟'];
+
+        var optionsText = "";
+        for (var i = 0; i < optionsList.length; i++) { 
+            optionsText += emojiList[i] + " " + optionsList[i] + "\n";
+        }
+
         var embed = new MessageEmbed()
             .setTitle(question)
+            .setDescription(optionsText)
             .setAuthor(msg.author.username, msg.author.displayAvatarURL())
             .setColor(0x00AE86)
             .setTimestamp()
@@ -34,9 +42,9 @@ module.exports = {
         msg.channel.send({ embed }) // Use a 2d array?
             .then(async function(message) {
                 var reactionArray = [];
-                reactionArray[0] = await message.react(emojiList[0]);
-                reactionArray[1] = await message.react(emojiList[1]);
-                reactionArray[2] = await message.react(emojiList[2]);
+                for (var i = 0; i < optionsList.length; i++) { 
+                    reactionArray[i] = await message.react(emojiList[i]);
+                }
 
                 if (time) {
                     setTimeout(() => {

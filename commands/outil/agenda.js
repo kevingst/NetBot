@@ -14,7 +14,7 @@ var con = mysql.createConnection({
 module.exports = {
     name: "agenda",
     aliases: ["devoir", "a"],
-    category: "information",
+    category: "outil",
     description: "Visualiser l'agenda de la classe.",
     run: async(client, message, args, command) => {
         var dateToday = new Date();
