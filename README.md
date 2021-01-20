@@ -1,7 +1,8 @@
-<center>
-<img src="https://cdn.discordapp.com/attachments/692345298491670568/696329292694683698/Capture.PNG" style="border-radius: 50%; width: 300px">
+# NetBot
 
-# **NetbeansBot - Réel petit lama**
-NetbeansBot est développé en Node.js par [@kriiox](https://github.com/kriiox/NetbeansBot).
-<br>
-</center>
+NetbeansBot is developed in Node.js with Discord.js by [@kriiox](https://github.com/kriiox/NetbeansBot).
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
