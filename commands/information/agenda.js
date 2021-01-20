@@ -2,6 +2,7 @@ const { MessageEmbed } = require("discord.js");
 const mysql = require('mysql');
 const configJSON = require("../../config.json");
 const { createLog } = require("../../functions.js");
+const moment = require('moment');
 
 var con = mysql.createConnection({
     host: configJSON.host,
@@ -15,7 +16,6 @@ module.exports = {
     aliases: ["devoir", "a"],
     category: "information",
     description: "Visualiser l'agenda de la classe.",
-    usage: "[Num semaine]",
     run: async(client, message, args, command) => {
         var dateToday = new Date();
         var listDevoir = [];
@@ -28,27 +28,26 @@ module.exports = {
 
         con.query("SELECT * FROM agenda where date_devoir >= now() ORDER BY date_devoir asc", function(err, rows, fields) {
             if (rows != undefined) {
+                if(rows.length != 0) {
                 rows.forEach(function(row) {
                     try {
                         var matiere = row.matiere;
                         var intitule = row.info_devoir;
                         var dateDevoir = new Date(row.date_devoir);
-                        var devoir = `> [:zzz:]`;
 
-                        let dateDevoirFormat = dateDevoir.toLocaleDateString('fr-FR',{
-                            weekday: 'long',
-                            month: 'long',
-                            day: 'numeric',
-                        });
-
-                        devoir = `> **【**${getEmoji(matiere)}**】** ${intitule}`;
+                        moment.locale("fr")
+                        let dateDevoirFormat = moment(dateDevoir).format('dddd Do MMMM');
+                        var devoir = `> **【**${getEmoji(matiere)}**】** ${intitule}`;
                         embed.addFields({ name: `**${dateDevoirFormat.charAt(0).toUpperCase() + dateDevoirFormat.substring(1).toLowerCase()}**:`, value: devoir, inline: false })
                     } catch (error) {
                         console.error('Erreur: Envoi du message Discord !');
                         console.error(error);
                     }
                 });
+            } else {
+                embed.addFields({ name: `Aucun devoir`, value: `> 💤💤`, inline: false })
             }
+        }
 
             if(message.channel.name == "【📅】agenda"){
                 message.channel.send(embed);
@@ -60,47 +59,29 @@ module.exports = {
     }
 }
 
-function getNumberOfWeek(dt) {
-    var tdt = new Date(dt.valueOf());
-    var dayn = (dt.getDay() + 6) % 7;
-    tdt.setDate(tdt.getDate() - dayn + 3);
-    var firstThursday = tdt.valueOf();
-    tdt.setMonth(0, 1);
-    if (tdt.getDay() !== 4) {
-        tdt.setMonth(0, 1 + ((4 - tdt.getDay()) + 7) % 7);
-    }
-    return 1 + Math.ceil((firstThursday - tdt) / 604800000);
-}
-
 function getEmoji(matiere){
     var newMatiere;
     switch (matiere) {
-        case "System Exp":
-            newMatiere = "🌐 System Exp";
+        case "Éthique & Politique":
+            newMatiere = "📔 Éthique & Politique";
             break;
-        case "Littérature Qué":
-            newMatiere = "📔 Littérature Qué";
+        case "Amélioration Application":
+            newMatiere = "📱 Amélioration Application";
             break;
-        case "Web Dyn":
-            newMatiere = "💻 Web Dyn";
+        case "Projet Web":
+            newMatiere = "💻 Projet Web";
             break;
-        case "Concept Web":
-            newMatiere = "💻 Concept Web";
+        case "Anglais 1":
+            newMatiere = "👅 Anglais 1";
             break;
-        case "Logiciel Info":
-            newMatiere = "💾 Logiciel Info";
+        case "Anglais 2":
+            newMatiere = "👅 Anglais 2";
             break;
-        case "Anglais Nul":
-            newMatiere = "👅 Anglais Nul";
+        case "Jeux Vidéo 3D":
+            newMatiere = "🎮 Jeux Vidéo 3D";
             break;
-        case "Anglais pas nul":
-            newMatiere = "👅 Anglais pas nul";
-            break;
-        case "Intro Jeu":
-            newMatiere = "🎮 Intro Jeu";
-            break;
-        case "Intro Reseau":
-            newMatiere = "🖨 Intro Reseau";
+        case "Stage":
+            newMatiere = "🧰 Stage";
             break;
     
         default:

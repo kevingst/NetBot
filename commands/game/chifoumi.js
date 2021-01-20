@@ -3,17 +3,16 @@ const { promptMessage } = require("../../functions.js");
 const { createLog } = require("../../functions.js");
 
 const chooseArr = ["🗻", "📰", "✂"];
+var finalResult = "";
 
 module.exports = {
     name: "chifoumi",
-    aliases: ["pfc", "pierrefeuilleciseau"],
     category: "game",
-    description: "C'est un Pierre, Feuille, Ciseaux. Je vais pas t'expliquer les règles.",
-    usage: "pfc",
+    description: "C'est un Chifumi. Je vais pas t'expliquer les règles.",
     run: async(client, message, args, command) => {
         const embed = new MessageEmbed()
             .setColor("#ffffff")
-            .setTitle(`${message.member.displayName} veut affronter ${message.guild.me.displayName} au Pierre/Feuille/Ciseau`)
+            .setTitle(`${message.member.displayName} veut affronter ${message.guild.me.displayName} au Chifoumi`)
             .setFooter(message.guild.me.displayName, client.user.displayAvatarURL())
             .setDescription("Sélectionne un emoji pour commencer à jouer.")
             .setTimestamp();
@@ -25,27 +24,34 @@ module.exports = {
         // Get a random emoji from the array
         const botChoice = chooseArr[Math.floor(Math.random() * chooseArr.length)];
 
-        // Check if it's a win/tie/loss
+        // Check if it's a win/tie/loss        
         const result = await getResult(reacted, botChoice);
         createLog(command, message.member, message.channel, result);
         // Clear the reactions
         await m.reactions.removeAll();
+        
+        if(reacted != null){
+            finalResult = `${reacted} vs ${botChoice}`;
+        } else {
+            finalResult = `${message.member.displayName} a abandonné.` 
+        }
 
         embed
             .setDescription("")
-            .addField(`${reacted} vs ${botChoice}`, result);
+            .addField(finalResult, result);
 
         m.edit(embed);
 
         function getResult(me, clientChosen) {
             if ((me === "🗻" && clientChosen === "✂") ||
                 (me === "📰" && clientChosen === "🗻") ||
-                (me === "✂" && clientChosen === "📰")) {
-                return `Victoire de ${message.member.displayName}`;
+                (me === "✂" && clientChosen === "📰") &&
+                (me != null)) {
+                return `Victoire de ${message.member.displayName} 🏆`;
             } else if (me === clientChosen) {
-                return "Egalité !";
+                return "Egalité ! 🤝";
             } else {
-                return `Victoire de ${message.guild.me.displayName}`;
+                return `Victoire de ${message.guild.me.displayName} 🏆`;
             }
         }
     }

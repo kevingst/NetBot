@@ -33,7 +33,7 @@ config({
 });
 
 client.on("ready", () => {
-    console.log(`Hey, ${client.user.username} est en ligne !`);
+    console.log(`Hey, ${client.user.username} est en ligne !`);    
 
     client.user.setPresence({
         status: "online",

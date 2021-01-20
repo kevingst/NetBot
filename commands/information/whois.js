@@ -4,7 +4,7 @@ const { stripIndents } = require("common-tags");
 
 module.exports = {
     name: "whois",
-    aliases: ["who", "user"],
+    aliases: ["who", "info"],
     category: "information",
     description: "Retourne les informations d'un utilisateur",
     usage: "[pseudo | id | mention]",
@@ -15,7 +15,7 @@ module.exports = {
         const joined = formatDate(member.joinedAt);
         const roles = member.roles.cache
             .filter(r => r.id !== message.guild.id)
-            .map(r => r).join(", ") || 'none';
+            .map(r => r).join(", ") || 'Aucun';
 
         // User variables
         const created = formatDate(member.user.createdAt);
@@ -25,7 +25,7 @@ module.exports = {
             .setThumbnail(member.user.displayAvatarURL())
             .setColor(member.displayHexColor === '#000000' ? '#ffffff' : member.displayHexColor)
 
-        .addField('Information membre:', stripIndents `**- Nom:** ${member.displayName}
+        .addField('Information serveur:', stripIndents `**- Nom:** ${member.displayName}
             **- A rejoins le:** ${joined}
             **- Roles:** ${roles}`, true)
 
@@ -35,9 +35,6 @@ module.exports = {
             **- Crée le**: ${created}`, true)
 
         .setTimestamp()
-
-        if (member.user.presence.activities)
-            embed.addField('Joue actuellement à', stripIndents `** Nom:** ${member.user.presence.activities}`);
 
         message.channel.send(embed);
         createLog(command, message.member, message.channel);

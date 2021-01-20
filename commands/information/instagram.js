@@ -23,7 +23,7 @@ module.exports = {
 
         try {
             res = await fetch(url).then(url => url.json());
-        } catch (e) {
+        } catch (e) {            
             return message.reply("Je n'ai pas trouvé cet utilisateur...")
                 .then(m => m.delete(5000));
         }
