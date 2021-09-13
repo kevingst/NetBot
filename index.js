@@ -4,17 +4,17 @@ const fs = require("fs");
 const configJSON = require("./config.json");
 const mysql = require('mysql');
 
-var con = mysql.createConnection({
-    host: configJSON.host,
-    user: configJSON.user,
-    password: configJSON.password,
-    database: configJSON.database
-});
+// var con = mysql.createConnection({
+//     host: configJSON.host,
+//     user: configJSON.user,
+//     password: configJSON.password,
+//     database: configJSON.database
+// });
 
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("[BDD] Connexion a la base de donnée avec succès !");
-});
+// con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("[BDD] Connexion a la base de donnée avec succès !");
+// });
 
 const client = new Client({
     disableEveryone: true
@@ -33,7 +33,7 @@ config({
 });
 
 client.on("ready", () => {
-    console.log(`Hey, ${client.user.username} est en ligne !`);    
+    console.log(`Hey, ${client.user.username} est en ligne !`);
 
     client.user.setPresence({
         status: "online",

@@ -8,28 +8,28 @@ module.exports = {
     aliases: ["poll"],
     category: "outil",
     description: "Créer un sondage (Maximum 10 options).",
-    usage: "<question?> <option (séparé par ',')> <temps (min)>",
-    run: async(client, message, args, command) => {
+    usage: "<question ?> <option1,option2,...> <;10>",
+    run: async (client, message, args, command) => {
         if (!message.content.includes("?")) return message.reply(`T'es sur que c'est une question ? Il ne manquerait pas un "?" par hasard...`)
 
-        var question = args[0];
-        var optionsList = args[1].split(",");
-        var time = args[2];
-        if(time == null){
+        var question = args.join(" ").split("?")[0];
+        var optionsList = args.join(" ").split("?")[1].split(";")[0].split(",");
+        var time = args.join(" ").split("?")[1].split(";")[1];
+        if (time == null) {
             time = 0.3;
         }
 
         createLog(command, message.member, message.channel, question);
         var msg = message;
-        var emojiList = ['1⃣','2⃣','3⃣','4⃣','5⃣','6⃣','7⃣','8⃣','9⃣','🔟'];
+        var emojiList = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'];
 
         var optionsText = "";
-        for (var i = 0; i < optionsList.length; i++) { 
+        for (var i = 0; i < optionsList.length; i++) {
             optionsText += emojiList[i] + " " + optionsList[i] + "\n";
         }
 
         var embed = new MessageEmbed()
-            .setTitle(question)
+            .setTitle(question + "?")
             .setDescription(optionsText)
             .setAuthor(msg.author.username, msg.author.displayAvatarURL())
             .setColor(0x00AE86)
@@ -40,9 +40,9 @@ module.exports = {
         msg.delete(); // Remove the user's command message
 
         msg.channel.send({ embed }) // Use a 2d array?
-            .then(async function(message) {
+            .then(async function (message) {
                 var reactionArray = [];
-                for (var i = 0; i < optionsList.length; i++) { 
+                for (var i = 0; i < optionsList.length; i++) {
                     reactionArray[i] = await message.react(emojiList[i]);
                 }
 
@@ -50,7 +50,7 @@ module.exports = {
                     setTimeout(() => {
                         // Re-fetch the message and get reaction counts
                         message.channel.messages.fetch(message.id)
-                            .then(async function(message) {
+                            .then(async function (message) {
                                 var reactionCountsArray = [];
                                 for (var i = 0; i < reactionArray.length; i++) {
                                     reactionCountsArray[i] = message.reactions.cache.get(emojiList[i]).count - 1;

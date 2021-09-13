@@ -8,13 +8,14 @@ module.exports = {
     aliases: ["v"],
     category: "outil",
     description: "Créer un vote Oui/Non/peut-etre.",
-    usage: "<question?> <Temps (min)>",
-    run: async(client, message, args, command) => {
+    usage: "<question ?> <;10>",
+    run: async (client, message, args, command) => {
         if (!message.content.includes("?")) return message.reply(`T'es sur que c'est une question ? Il ne manquerait pas un "?" par hasard...`)
 
-        var question = args[0];
-        var time = args[1];
-        if(time == null){
+        var question = args.join(" ").split("?")[0];
+        var time = args.join(" ").split(";")[1];
+        console.log(time);
+        if (time == null) {
             time = 1;
         }
 
@@ -22,7 +23,7 @@ module.exports = {
         var msg = message;
         var emojiList = ['👍', '👎', '🤷'];
         var embed = new MessageEmbed()
-            .setTitle(question)
+            .setTitle(question + "?")
             .setAuthor(msg.author.username, msg.author.displayAvatarURL())
             .setColor(0x00AE86)
             .setTimestamp()
@@ -32,7 +33,7 @@ module.exports = {
         msg.delete(); // Remove the user's command message
 
         msg.channel.send({ embed }) // Use a 2d array?
-            .then(async function(message) {
+            .then(async function (message) {
                 var reactionArray = [];
                 reactionArray[0] = await message.react(emojiList[0]);
                 reactionArray[1] = await message.react(emojiList[1]);
@@ -42,7 +43,7 @@ module.exports = {
                     setTimeout(() => {
                         // Re-fetch the message and get reaction counts
                         message.channel.messages.fetch(message.id)
-                            .then(async function(message) {
+                            .then(async function (message) {
                                 var reactionCountsArray = [];
                                 for (var i = 0; i < reactionArray.length; i++) {
                                     reactionCountsArray[i] = message.reactions.cache.get(emojiList[i]).count - 1;
