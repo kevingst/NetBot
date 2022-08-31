@@ -16,7 +16,7 @@
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^4.2.7",
     "moment": "^2.29.1",
-    "moment-timezone": "^0.5.33",
+    "moment-timezone": "^0.5.35",
     "mysql": "^2.18.1",
     "ytdl-core": "^4.4.3"
   },
